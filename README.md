@@ -34,3 +34,5 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+Este es un aplicativo web que se encarga de evaluar el perfil del usuario con respecto a la central de riesgo y al mismo tiempo de brindarle bancos como opciones para adrquirir su prestamo dependiendo de su perfil y los requisitos del banco
