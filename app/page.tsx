@@ -1,10 +1,9 @@
-// app/page.tsx (o donde esté tu componente principal)
 "use client";
 
 import React, { useState } from "react";
-import LoginComponent from "../app/components/loginComponent";
-import InfoComponent from "../app/components/infoComponent";
-import RegistroModal from "../app/components/registerModal";
+import LoginComponent from "./components/initialPage/loginComponent";
+import InfoComponent from "./components/initialPage/infoComponent";
+import RegistroModal from "./components/initialPage/registerModal";
 
 export default function Home() {
   const [showRegistro, setShowRegistro] = useState(false);

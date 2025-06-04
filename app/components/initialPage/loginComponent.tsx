@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from 'next/navigation'; // 👈 ¡Corrección aquí!
-import homeClient from "../Pages/homeClient/page";
+import homeClient from "../../Pages/homeClient/page";
 import React from "react";
 import {
   FaFacebookF,

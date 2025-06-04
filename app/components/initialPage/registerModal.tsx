@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { registrarUsuario } from "./storage/registerUserCall";
+import { registrarUsuario } from "../storage/registerUserCall";
 
 export default function RegistroModal({ onClose }: { onClose: () => void }) {
   const [form, setForm] = useState({
