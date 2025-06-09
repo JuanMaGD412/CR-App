@@ -48,7 +48,7 @@ export default function LoanApplicationForm() {
             
             <div className="ml-[33.33%] w-2/3 h-screen  p-10">
             {/*<div className="bg-gray-100 p-8 rounded-xl shadow-md max-w-3xl mx-auto">*/}
-              <div className="space-y-4 max-w-xl mx-auto text-gray-500">
+              <div className="space-y-4 mb-4 text-sm text-gray-500">
                 Paso {step + 1} de {steps.length} - <strong>{steps[step]}</strong>
               </div>
               {/* Formulario dinámico */}
@@ -60,7 +60,7 @@ export default function LoanApplicationForm() {
               {step === 5 && <Assets />}
               {step === 6 && <AdditionalData />}
               {step === 7 && <LoanDetails />}
-              <div className="space-y-4 max-w-xl mx-auto flex justify-between items-center">
+              <div className="mt-6 flex justify-between items-center">
                 <button
                   className="px-4 py-2 bg-gray-300 rounded"
                   onClick={prev}
