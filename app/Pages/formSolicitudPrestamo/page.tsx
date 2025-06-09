@@ -5,6 +5,8 @@ import {HeaderSlideTramites} from "../../components/uiClient/headerSlideClient";
 import {PersonalInfo1, PersonalInfo2} from '../../components/FormSolicitudPrestamo/personalInfo';
 import {WorkInfo1, WorkInfo2} from '../../components/FormSolicitudPrestamo/workInfo';
 import PersonalReferences from '../../components/FormSolicitudPrestamo/PersonalReferences';
+import {Assets} from '../../components/FormSolicitudPrestamo/assets';
+import {AdditionalData} from '../../components/FormSolicitudPrestamo/additionalData';
 import {LoanDetails} from '../../components/FormSolicitudPrestamo/loanDetails';
 
 const steps = [
@@ -43,37 +45,39 @@ export default function LoanApplicationForm() {
                 </p>
             </div>
             {/* Panel Derecho */}
+            
             <div className="ml-[33.33%] w-2/3 h-screen  p-10">
-                <div className="mb-4 text-sm text-gray-500">
+            {/*<div className="bg-gray-100 p-8 rounded-xl shadow-md max-w-3xl mx-auto">*/}
+              <div className="space-y-4 max-w-xl mx-auto text-gray-500">
                 Paso {step + 1} de {steps.length} - <strong>{steps[step]}</strong>
-                </div>
-
-                {/* Formulario dinámico */}
-                {step === 0 && <PersonalInfo1 />}
-                {step === 1 && <PersonalInfo2 />}
-                {step === 2 && <WorkInfo1 />}
-                {step === 3 && <WorkInfo2 />}
-                {step === 4 && <PersonalReferences />}
-                {step === 5 && <Assets />}
-                {step === 6 && <AdditionalData />}
-                {step === 7 && <LoanDetails />}
-
-                <div className="mt-6 flex justify-between">
+              </div>
+              {/* Formulario dinámico */}
+              {step === 0 && <PersonalInfo1 />}
+              {step === 1 && <PersonalInfo2 />}
+              {step === 2 && <WorkInfo1 />}
+              {step === 3 && <WorkInfo2 />}
+              {step === 4 && <PersonalReferences />}
+              {step === 5 && <Assets />}
+              {step === 6 && <AdditionalData />}
+              {step === 7 && <LoanDetails />}
+              <div className="space-y-4 max-w-xl mx-auto flex justify-between items-center">
                 <button
-                    className="px-4 py-2 bg-gray-300 rounded"
-                    onClick={prev}
-                    disabled={step === 0}
+                  className="px-4 py-2 bg-gray-300 rounded"
+                  onClick={prev}
+                  disabled={step === 0}
                 >
-                    Atrás
+                  Atrás
                 </button>
                 <button
-                    className="px-4 py-2 bg-green-500 text-white rounded"
-                    onClick={next}
+                  className="px-4 py-2 bg-green-500 text-white rounded"
+                  onClick={next}
+                  disabled={step === 0}
                 >
-                    {step === steps.length - 1 ? 'Enviar' : 'Siguiente'}
+                  {step === steps.length - 1 ? 'Enviar' : 'Siguiente'}
                 </button>
-                </div>
-            </div>
+              </div>
+            {/*</div>*/}
+          </div>
         </div>
     </div>
   )
@@ -111,30 +115,3 @@ function CommercialReferences() {
     </form>
   )
 }*/
-
-function Assets() {
-  return (
-    <form className="space-y-4">
-      <input className="border p-2 w-full" placeholder="Propiedades a nombre del solicitante" />
-      <input className="border p-2 w-full" placeholder="Valor comercial" />
-      <input className="border p-2 w-full" placeholder="Certificados o escrituras" />
-      <input className="border p-2 w-full" placeholder="Vehículos u otros activos" />
-      <input className="border p-2 w-full" placeholder="Declaración de renta" />
-    </form>
-  )
-}
-
-function AdditionalData() {
-  return (
-    <form className="space-y-4">
-      <div className="flex items-center space-x-2">
-        <input type="checkbox" id="autorizacion" className="w-4 h-4" />
-        <label htmlFor="autorizacion" className="text-sm"> Autorizo la consulta en centrales de riesgo</label>
-      </div>
-
-      <input className="border p-2 w-full" placeholder="Firma del solicitante" />
-      <input className="border p-2 w-full" placeholder="Subida de cédula" />
-      <input className="border p-2 w-full" placeholder="Subida de recibos/soportes" />
-    </form>
-  )
-}

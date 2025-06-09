@@ -140,10 +140,6 @@ export default function RegistroModal({ onClose }: { onClose: () => void }) {
                 <input name="ciudad" onChange={handleChange} value={form.ciudad} className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-600">Barrio</label>
-                <input name="barrio" onChange={handleChange} value={form.barrio} className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500" />
-              </div>
-              <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-600">Dirección</label>
                 <input name="direccion" onChange={handleChange} value={form.direccion} className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500" />
               </div>
