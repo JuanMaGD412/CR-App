@@ -1,9 +1,17 @@
+// test-connection.js
 import pkg from 'pg';
 const { Pool } = pkg;
 
 const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL_NON_POOLING,
-  ssl: false, // importante para el pooler de Supabase
+  host: 'aws-0-us-east-1.pooler.supabase.com',
+  user: 'postgres.mepqgipnicweghojgycb',
+  password: 'ProjectsJuanma412',
+  database: 'postgres',
+  port: 5432,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+  max: 10,
 });
 
 export default pool;

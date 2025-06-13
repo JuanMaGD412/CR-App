@@ -43,7 +43,7 @@ export default function RegistroModal({ onClose }: { onClose: () => void }) {
       const response = await registrarUsuario(form);
       console.log("Usuario registrado con éxito:", response);
       alert("¡Registro exitoso!");
-      onClose(); // cerrar el modal si todo va bien
+      onClose();
     } catch (error) {
       alert("Ocurrió un error al registrar el usuario.");
     }
@@ -96,7 +96,7 @@ export default function RegistroModal({ onClose }: { onClose: () => void }) {
               <div>
                 <label className="block text-sm font-medium text-gray-600">Género</label>
                 <select name="genero" onChange={handleChange} value={form.genero} className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500">
-                  <option value="Masculino">Seleccione</option>
+                  <option value="Seleccione">Seleccione</option>
                   <option value="Masculino">Masculino</option>
                   <option value="Femenino">Femenino</option>
                   <option value="Otro">Otro</option>

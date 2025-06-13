@@ -1,7 +1,8 @@
 "use client";
+import React, { useState } from "react";
 import { useRouter } from 'next/navigation'; // 👈 ¡Corrección aquí!
 import homeClient from "../../Pages/homeClient/page";
-import React from "react";
+import { iniciarSesion } from "../storage/loginUserCall";
 import {
   FaFacebookF,
   FaTwitter,
@@ -10,15 +11,26 @@ import {
 } from "react-icons/fa";
 
 export default function LoginComponent({ onRegisterClick }: { onRegisterClick: () => void }) {
-  const router = useRouter(); // 👈 Aquí inicializas el router
+  const router = useRouter();
+  const [correo, setCorreo] = useState("");
+  const [contrasena, setContrasena] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
 
-    // Aquí podrías validar el login más adelante
-    // Si todo va bien, navega:
-    router.push("../Pages/homeClient"); // 👈 Cambia esto por la ruta a tu nueva pantalla
+    try {
+      const data = await iniciarSesion({ correo, contrasena });
+      console.log("Sesión iniciada:", data);
+
+      // Redirigir a home si todo bien
+      router.push("/Pages/homeClient");
+    } catch (err: any) {
+      setError(err.message);
+    }
   };
+
 
   return (
     <div
@@ -37,24 +49,30 @@ export default function LoginComponent({ onRegisterClick }: { onRegisterClick: (
       <div className="w-full max-w-md mx-auto mt-20">
         <h1 className="text-3xl font-bold mb-6">Bienvenido</h1>
         <form className="space-y-4" onSubmit={handleSubmit}>
-          <input type="email" placeholder="Correo electrónico" className="w-full p-2 rounded bg-white text-black border border-gray-300"/>
-          <input type="password" placeholder="Contraseña" className="w-full p-2 rounded bg-white text-black border border-gray-300"/>
-          <button
-            type="submit"
-            className="w-full bg-white text-green-600 font-semibold p-2 rounded"
-          >
+          <input
+            type="email"
+            placeholder="Correo electrónico"
+            className="w-full p-2 rounded bg-white text-black border border-gray-300"
+            value={correo}
+            onChange={(e) => setCorreo(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Contraseña"
+            className="w-full p-2 rounded bg-white text-black border border-gray-300"
+            value={contrasena}
+            onChange={(e) => setContrasena(e.target.value)}
+          />
+          <button type="submit" className="w-full bg-white text-green-600 font-semibold p-2 rounded">
             Iniciar sesión
           </button>
-          <p className="text-sm mt-2 underline cursor-pointer">
-            ¿Olvidaste tu contraseña?
-          </p>
+          {error && <p className="text-sm text-red-700">{error}</p>}
+          <p className="text-sm mt-2 underline cursor-pointer">¿Olvidaste tu contraseña?</p>
           <p className="text-sm mt-1 text-center underline cursor-pointer" onClick={onRegisterClick}>
             ¿Aún no estás registrado?
           </p>
         </form>
       </div>
-
-      <div></div>
     </div>
   );
 }

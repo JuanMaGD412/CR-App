@@ -1,10 +1,8 @@
-import pool from "../../lib/db";
 import { NextResponse } from "next/server";
+import pool from "../../lib/db";
 
 export async function POST(req) {
   try {
-    const data = await req.json();
-
     const {
       nombres,
       apellidos,
@@ -23,53 +21,37 @@ export async function POST(req) {
       pais,
       departamento,
       ciudad,
-      barrio,
-    } = data;
+    } = await req.json();
 
     const query = `
-      INSERT INTO usuarios (
+      INSERT INTO cr_usuarios (
         nombres, apellidos, tipo_documento, numero_documento, fecha_expedicion,
         lugar_expedicion, fecha_nacimiento, genero, correo, telefono,
         direccion, contrasena, rol, estado_laboral, pais,
-        departamento, ciudad, barrio, creado_en, actualizado_en
+        departamento, ciudad, creado_en, actualizado_en
       ) VALUES (
         $1, $2, $3, $4, $5,
         $6, $7, $8, $9, $10,
         $11, $12, $13, $14, $15,
-        $16, $17, $18, now(), now()
+        $16, $17, NOW(), NOW()
       )
-      RETURNING *;
+      RETURNING id;
     `;
 
     const values = [
       nombres, apellidos, tipo_documento, numero_documento, fecha_expedicion,
       lugar_expedicion, fecha_nacimiento, genero, correo, telefono,
       direccion, contrasena, rol, estado_laboral, pais,
-      departamento, ciudad, barrio,
+      departamento, ciudad,
     ];
 
     const result = await pool.query(query, values);
+    const nuevoUsuarioId = result.rows[0].id;
 
-    return NextResponse.json({
-      message: "Usuario registrado correctamente",
-      data: result.rows[0],
-    }, { status: 201 });
+    return NextResponse.json({ message: "Usuario registrado correctamente", id: nuevoUsuarioId }, { status: 201 });
 
   } catch (error) {
-    console.error("Error en el registro:", error);
-
-    // Puedes usar código y mensaje del error para responder con más detalle
-    const pgError = {
-      code: error.code || null,
-      message: error.message || "Error desconocido",
-      detail: error.detail || null,
-      severity: error.severity || null,
-      hint: error.hint || null,
-    };
-
-    return NextResponse.json({
-      error: "Error al registrar el usuario",
-      detalle: pgError
-    }, { status: 500 });
+    console.error("Error al registrar el usuario:", error);
+    return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 });
   }
 }
