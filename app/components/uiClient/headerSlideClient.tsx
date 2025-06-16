@@ -1,20 +1,28 @@
-import { Bell, UserCircle, AppWindow, Home } from "lucide-react"; // Puedes usar cualquier ícono de Lucide u otro paquete
+import { Bell, UserCircle, AppWindow, Home } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import {UserMenu} from "./userMenu";
 import {UserMenuSlideTramites} from "./userMenu";
 
-export  function HeaderSlideClient() {
+export function HeaderSlideClient() {
+  const [usuario, setUsuario] = useState<{ nombres: string } | null>(null);
+
+  useEffect(() => {
+    const userData = localStorage.getItem("usuario");
+    if (userData) {
+      setUsuario(JSON.parse(userData));
+    }
+  }, []);
+
   return (
     <div className="w-full h-16 bg-white shadow flex items-center justify-between px-6">
-      {/* Sección izquierda: Perfil + Bienvenida */}
       <div className="flex items-center gap-3">
         <UserMenu />
         <span className="text-gray-700 font-semibold text-lg">
-          👋 Bienvenido, Juanma
+          👋 Bienvenido{usuario ? `, ${usuario.nombres}` : ""}
         </span>
       </div>
 
-      {/* Sección derecha: Notificaciones + Logo */}
       <div className="flex items-center gap-4">
         <button className="text-yellow-500 hover:text-yellow-600 transition">
           <Bell className="w-6 h-6" />

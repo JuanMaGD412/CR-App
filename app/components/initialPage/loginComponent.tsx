@@ -1,11 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from 'next/navigation'; // 👈 ¡Corrección aquí!
-import homeClient from "../../Pages/homeClient/page";
+import { useRouter } from 'next/navigation';
 import { iniciarSesion } from "../storage/loginUserCall";
 import {
   FaFacebookF,
-  FaTwitter,
+  FaTwitter, 
   FaLinkedinIn,
   FaInstagram,
 } from "react-icons/fa";
@@ -22,15 +21,15 @@ export default function LoginComponent({ onRegisterClick }: { onRegisterClick: (
 
     try {
       const data = await iniciarSesion({ correo, contrasena });
-      console.log("Sesión iniciada:", data);
 
-      // Redirigir a home si todo bien
+      localStorage.setItem("usuario", JSON.stringify(data.usuario));
+
       router.push("/Pages/homeClient");
     } catch (err: any) {
-      setError(err.message);
+      setError("Correo o contraseña incorrectos"); // mensaje amigable
+      console.error("Error en login:", err);
     }
   };
-
 
   return (
     <div

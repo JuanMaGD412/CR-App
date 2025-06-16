@@ -1,7 +1,6 @@
 // app/api/login/route.js
 import { NextResponse } from "next/server";
 import pool from "../../lib/db";
-import bcrypt from "bcrypt"; // Opcional, si usas contraseñas encriptadas
 
 export async function POST(req) {
   try {
