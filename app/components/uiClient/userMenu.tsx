@@ -33,7 +33,7 @@ export function UserMenu() {
           <ul className="py-2 text-sm text-gray-700">
             <li>
               <Link
-                href="/perfil"
+                href="/Pages/userProfile"
                 className="block px-4 py-2 hover:bg-yellow-100 transition"
               >
                 Ver perfil
@@ -76,7 +76,7 @@ export function UserMenuSlideTramites() {
             <ul className="py-2 text-sm text-gray-700">
               <li>
                 <Link
-                  href="/perfil"
+                  href="/Pages/userProfile"
                   className="block px-4 py-2 hover:bg-yellow-100 transition"
                 >
                   Ver perfil

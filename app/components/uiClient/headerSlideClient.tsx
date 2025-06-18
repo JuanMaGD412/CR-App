@@ -55,3 +55,18 @@ export function HeaderSlideTramites() {
     </div>
   );
 }
+
+export function HeaderSlideProfile() {
+  return (
+    <div className="w-full h-16 bg-white shadow flex items-center px-6">
+      <Link
+        href="/Pages/homeClient"
+        className="flex items-center gap-2 text-yellow-500 hover:text-yellow-600 transition"
+        title="Volver al inicio"
+      >
+        <Home className="w-7 h-7" />
+        <span className="text-sm font-medium hidden sm:inline">Inicio</span>
+      </Link>
+    </div>
+  );
+}
