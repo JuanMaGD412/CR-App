@@ -15,12 +15,11 @@ export async function POST(req) {
 
     const usuario = result.rows[0];
 
-    // Si usas contraseñas en texto plano:
     if (usuario.contrasena !== contrasena) {
       return NextResponse.json({ error: "Contraseña incorrecta" }, { status: 401 });
     }
 
-    // Si usas contraseñas encriptadas (mejor práctica):
+    // Para contraseñas encriptadas:
     // const passwordMatch = await bcrypt.compare(contrasena, usuario.contrasena);
     // if (!passwordMatch) {
     //   return NextResponse.json({ error: "Contraseña incorrecta" }, { status: 401 });

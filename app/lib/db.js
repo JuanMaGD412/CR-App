@@ -1,4 +1,3 @@
-// test-connection.js
 import pkg from 'pg';
 const { Pool } = pkg;
 

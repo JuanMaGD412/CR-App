@@ -72,9 +72,7 @@ export default function LoanApplicationForm() {
   className="px-4 py-2 bg-green-500 text-white rounded"
   onClick={() => {
     if (step === steps.length - 1) {
-      // Aquí haces el envío del formulario
       alert("Formulario enviado correctamente.");
-      // Puedes resetear o redirigir si quieres
     } else {
       next();
     }

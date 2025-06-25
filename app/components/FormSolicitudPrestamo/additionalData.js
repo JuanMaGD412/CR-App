@@ -5,10 +5,9 @@ export function AdditionalData() {
     "border border-gray-300 rounded-lg px-3 py-2 w-full text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-400";
   const labelClass = "block text-sm font-medium text-gray-700 mb-1";
 
-  const [signOption, setSignOption] = useState("upload"); // 'upload' o 'draw'
+  const [signOption, setSignOption] = useState("upload");
   const [signatureImage, setSignatureImage] = useState(null);
 
-  // Canvas refs
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
   const drawing = useRef(false);
@@ -26,9 +25,6 @@ export function AdditionalData() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
   }, [signOption]);
-
-  // Handlers para dibujar
-  // ... código anterior
 
 // Handlers para dibujar
   function getCursorPosition(e) {

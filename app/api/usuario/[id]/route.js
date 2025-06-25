@@ -38,7 +38,7 @@ export async function PUT(req) {
         departamento,
         ciudad,
         direccion,
-        contrasena, // opcional
+        contrasena,
         rol,
         estado_laboral,
       } = data;

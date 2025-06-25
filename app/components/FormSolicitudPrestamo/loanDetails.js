@@ -20,7 +20,6 @@ export function LoanDetails() {
   const destinos = ["Libre inversión", "Vivienda", "Estudio", "Otro"];
 
   // Función para calcular cuotas
-  // Vamos a asumir periodicidad en número de pagos por mes:
   // mensual = 1, quincenal = 2, semanal = 4 (aprox)
   const periodicidadMap = {
     mensual: 1,

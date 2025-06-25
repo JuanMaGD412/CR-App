@@ -1,4 +1,3 @@
-// services/auth.ts o donde guardes funciones externas
 export async function iniciarSesion(data: { correo: string; contrasena: string }) {
     try {
       const response = await fetch("/api/login", {
