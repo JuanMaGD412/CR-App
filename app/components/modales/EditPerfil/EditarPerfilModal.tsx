@@ -1,9 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
-import { Pencil } from "lucide-react";
-
-export default function EditUserModal({ user, onClose, onSave }: { user: any; onClose: () => void; onSave: (data: any) => void }) {
+import { actualizarUsuario } from "../../storage/editPerfil"; 
+export default function EditUserModal({
+  user,
+  onClose,
+  onSave,
+}: {
+  user: any;
+  onClose: () => void;
+  onSave: (data: any) => void;
+}) {
   const [form, setForm] = useState({
     nombres: user.nombres || "",
     apellidos: user.apellidos || "",
@@ -18,7 +25,6 @@ export default function EditUserModal({ user, onClose, onSave }: { user: any; on
     pais: user.pais || "",
     departamento: user.departamento || "",
     ciudad: user.ciudad || "",
-    barrio: user.barrio || "",
     direccion: user.direccion || "",
     contrasena: "",
     confirmarContrasena: "",
@@ -28,17 +34,26 @@ export default function EditUserModal({ user, onClose, onSave }: { user: any; on
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (form.contrasena && form.contrasena !== form.confirmarContrasena) {
       alert("Las contraseñas no coinciden.");
       return;
     }
-    onSave(form);
-    onClose();
+
+    try {
+      await actualizarUsuario(user.id, form);
+      alert("Perfil actualizado correctamente.");
+      onSave(form);
+      onClose();
+    } catch (error: any) {
+      console.error("Error al actualizar:", error);
+      alert(error.message);
+    }
   };
 
   return (
@@ -47,6 +62,7 @@ export default function EditUserModal({ user, onClose, onSave }: { user: any; on
         <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl">&times;</button>
         <h2 className="text-2xl font-bold mb-6 text-center text-yellow-600">Editar Perfil</h2>
         <form onSubmit={handleSubmit} className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
+          {/* Información Personal */}
           <div>
             <h3 className="text-lg font-semibold text-gray-700 mb-2">Información Personal</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -62,6 +78,7 @@ export default function EditUserModal({ user, onClose, onSave }: { user: any; on
             </div>
           </div>
 
+          {/* Información de contacto */}
           <div>
             <h3 className="text-lg font-semibold text-gray-700 mb-2">Información de Contacto</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -70,19 +87,18 @@ export default function EditUserModal({ user, onClose, onSave }: { user: any; on
               <Input label="País" name="pais" value={form.pais} onChange={handleChange} />
               <Input label="Departamento" name="departamento" value={form.departamento} onChange={handleChange} />
               <Input label="Ciudad" name="ciudad" value={form.ciudad} onChange={handleChange} />
-              <Input label="Barrio" name="barrio" value={form.barrio} onChange={handleChange} />
               <Input label="Dirección" name="direccion" value={form.direccion} onChange={handleChange} />
             </div>
           </div>
-
+          {/* Seguridad */}
           <div>
             <h3 className="text-lg font-semibold text-gray-700 mb-2">Seguridad</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input label="Contraseña" name="contrasena" type="password" value={form.contrasena} onChange={handleChange} />
-              <Input label="Confirmar contraseña" name="confirmarContrasena" type="password" value={form.confirmarContrasena} onChange={handleChange} />
-            </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input label="Contraseña nueva (opcional)" name="contrasena" type="password" value={form.contrasena} onChange={handleChange} />
+                <Input label="Confirmar contraseña" name="confirmarContrasena" type="password" value={form.confirmarContrasena} onChange={handleChange} />
+              </div>
           </div>
-
+          {/* Botón de guardar */}
           <div>
             <button type="submit" className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 rounded">
               Guardar cambios

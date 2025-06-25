@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Pencil } from "lucide-react";
 import EditarPerfilModal from "../../components/modales/EditPerfil/EditarPerfilModal";
@@ -17,42 +17,44 @@ function InfoItem({ label, value }: { label: string; value: string }) {
 }
 
 export default function UserProfilePage() {
+  const [user, setUser] = useState<any>(null);
   const [openModal, setOpenModal] = useState(false);
   const [openPhotoModal, setOpenPhotoModal] = useState(false);
 
-  const [user, setUser] = useState({
-    nombres: "JUAN MANUEL",
-    apellidos: "GRANDET DUARTE",
-    tipo_documento: "CÉDULA DE CIUDADANÍA",
-    numero_documento: "1193037859",
-    fecha_expedicion: "",
-    lugar_expedicion: "",
-    fecha_nacimiento: "2001-04-12",
-    genero: "Masculino",
-    correo: "juangrandeth@gmail.com",
-    telefono: "3226002479",
-    pais: "",
-    departamento: "",
-    ciudad: "CHIGORODÓ",
-    barrio: "",
-    direccion: "",
-    contrasena: "",
-    confirmarContrasena: "",
-    rol: "cliente",
-    estado_laboral: "Seleccione situación laboral",
-    foto: "/perfil_demo.jpg",
-  });
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const usuarioLocal = localStorage.getItem("usuario");
+      if (!usuarioLocal) return;
+
+      const { id } = JSON.parse(usuarioLocal);
+
+      try {
+        const res = await fetch(`/api/usuario/${id}`);
+        if (!res.ok) throw new Error("Error al obtener datos del usuario");
+        const data = await res.json();
+        setUser(data);
+      } catch (err) {
+        console.error("Error al cargar el perfil:", err);
+      }
+    };
+
+    fetchUserData(); 
+  }, []);
 
   const handleSave = (newData: any) => {
-    setUser((prev) => ({ ...prev, ...newData }));
+    setUser((prev: any) => ({ ...prev, ...newData }));
     setOpenModal(false);
   };
 
   const handlePhotoSave = (newPhoto: File) => {
     const nuevaUrl = URL.createObjectURL(newPhoto);
-    setUser((prev) => ({ ...prev, foto: nuevaUrl }));
+    setUser((prev: any) => ({ ...prev, foto: nuevaUrl }));
     setOpenPhotoModal(false);
   };
+
+  if (!user) {
+    return <div className="p-10 text-center">Cargando perfil...</div>;
+  }
 
   return (
     <>
@@ -63,7 +65,7 @@ export default function UserProfilePage() {
           {/* Encabezado con imagen */}
           <div className="flex items-center space-x-6">
             <Image
-              src={user.foto}
+              src={user.foto || "/perfil_demo.jpg"}
               alt="Foto de perfil"
               width={120}
               height={120}

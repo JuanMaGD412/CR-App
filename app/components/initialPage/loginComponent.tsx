@@ -26,7 +26,7 @@ export default function LoginComponent({ onRegisterClick }: { onRegisterClick: (
 
       router.push("/Pages/homeClient");
     } catch (err: any) {
-      setError("Correo o contraseña incorrectos"); // mensaje amigable
+      setError("Correo o contraseña incorrectos"); 
       console.error("Error en login:", err);
     }
   };
