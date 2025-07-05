@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/components/FormSolicitudPrestamo/PersonalReferences.js", "app/components/FormSolicitudPrestamo/additionalData.js", "app/components/FormSolicitudPrestamo/loanDetails.js", "app/Pages/userProfile/page.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/components/FormSolicitudPrestamo/PersonalReferences.js", "app/components/FormSolicitudPrestamo/additionalData.js", "app/components/FormSolicitudPrestamo/loanDetails.js", "app/Pages/userProfile/page.tsx", "app/components/storage/guardarDatosPersonaels.js", "app/Pages/formSolicitudPrestamo/page.js", "app/components/FormSolicitudPrestamo/personalInfo.js", "app/components/storage/enviarDatos.js", "app/components/FormSolicitudPrestamo/workInfo.js", "app/components/storage/guardarDatosTrabajo.js"],
   "exclude": ["node_modules"]
 }
