@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { HeaderSlideTramites } from "../../components/uiClient/headerSlideClient";
 
 type CreditStatus = 'aprobado' | 'rechazado' | 'en proceso';
@@ -16,36 +16,6 @@ interface CreditRequest {
   estadoCredito: CreditStatus;
 }
 
-const data: CreditRequest[] = [
-  {
-    id: '000001',
-    fecha: '2025-05-01',
-    monto: '$5,000,000',
-    infoPersonal: 'ok',
-    infoLaboral: 'faltante',
-    referencias: 'ok',
-    estadoCredito: 'en proceso',
-  },
-  {
-    id: '000002',
-    fecha: '2025-05-15',
-    monto: '$2,500,000',
-    infoPersonal: 'inconsistente',
-    infoLaboral: 'ok',
-    referencias: 'ok',
-    estadoCredito: 'rechazado',
-  },
-  {
-    id: '000003',
-    fecha: '2025-05-30',
-    monto: '$7,000,000',
-    infoPersonal: 'ok',
-    infoLaboral: 'ok',
-    referencias: 'ok',
-    estadoCredito: 'aprobado',
-  },
-];
-
 const statusColor = {
   ok: 'text-green-600',
   inconsistente: 'text-yellow-600',
@@ -56,32 +26,65 @@ const statusColor = {
 };
 
 export default function CreditHistoryTable() {
+  const [data, setData] = useState<CreditRequest[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Total páginas
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  // Cargar datos desde el backend
+  useEffect(() => {
+    const fetchData = async () => {
+      const usuarioLocal = localStorage.getItem("usuario");
+      if (!usuarioLocal) return;
 
-  // Slice de datos para la página actual
+      const { id: id_usuario } = JSON.parse(usuarioLocal);
+
+      try {
+        const res = await fetch("/api/historial-crediticio", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id_usuario }),
+        });
+
+        const result = await res.json();
+        if (result.success) {
+          const formatted = result.data.map((item: any) => ({
+            id: item.solicitud_id,
+            fecha: item.fecha,
+            monto: `$${Number(item.monto).toLocaleString()}`,
+            infoPersonal: item.info_personal,
+            infoLaboral: item.info_laboral,
+            referencias: item.referencias,
+            estadoCredito: item.estado_credito,
+          }));
+          setData(formatted);
+        } else {
+          console.error("❌ Error al obtener datos:", result.message);
+        }
+      } catch (error) {
+        console.error("❌ Error en fetch:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Paginación
+  const totalPages = Math.ceil(data.length / itemsPerPage);
   const currentData = data.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  // Cambiar página
   const goToPage = (page: number) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
   };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-yellow-100 to-white flex flex-col items-center">
-      {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-50">
         <HeaderSlideTramites />
       </div>
 
-      {/* Contenido */}
-      <div className="min-h-screen bg-gradient-to-b from-yellow-100 to-white flex flex-col items-center">
-      {/* ...Header y título... */}
       <div className="mt-32 w-full max-w-6xl px-6">
         <h2 className="text-2xl font-bold text-yellow-700 mb-6 text-center">
           🧾 Historial de solicitudes de crédito
@@ -143,7 +146,6 @@ export default function CreditHistoryTable() {
             Anterior
           </button>
 
-          {/* Números de página */}
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <button
               key={page}
@@ -174,7 +176,6 @@ export default function CreditHistoryTable() {
         <p className="text-sm text-gray-500 mt-4 text-center">
           * Colores indican el estado de cada sección. Revisa los datos inconsistentes o faltantes para mejorar la probabilidad de aprobación.
         </p>
-      </div>
       </div>
     </div>
   );

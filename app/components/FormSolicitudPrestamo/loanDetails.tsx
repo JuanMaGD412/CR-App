@@ -1,44 +1,56 @@
-import { useState, useEffect } from "react";
+'use client';
 
-export function LoanDetails() {
+import React, { useEffect } from "react";
+
+type LoanData = {
+  monto: string;
+  tiempo_meses: number | string;
+  frecuencia_pago: string;
+  cuotas_calculadas: number;
+  destino_prestamo: string;
+  tipo_garantia: string;
+  otros_prestamos: string;
+  descripcion: string;
+};
+
+type Props = {
+  data: LoanData;
+  setData: React.Dispatch<React.SetStateAction<LoanData>>;
+};
+
+export function LoanDetails({ data, setData }: Props) {
   const inputClass =
     "border border-gray-300 rounded-lg px-3 py-2 w-full text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-400";
   const labelClass = "block text-sm font-medium text-gray-700 mb-1";
 
-  // Estado para campos
-  const [monto, setMonto] = useState("");
-  const [tiempoMeses, setTiempoMeses] = useState("");
-  const [frecuenciaPago, setFrecuenciaPago] = useState("");
-  const [cuotasCalculadas, setCuotasCalculadas] = useState(0);
-  const [destinoPrestamo, setDestinoPrestamo] = useState("");
-  const [tipoGarantia, setTipoGarantia] = useState("");
-  const [otrosPrestamos, setOtrosPrestamos] = useState("");
-  const [descripcion, setDescripcion] = useState("");
-
-  // Opciones fijas
   const tiempos = [2, 4, 6, 12, 18, 24, 36, 48, 60];
   const destinos = ["Libre inversión", "Vivienda", "Estudio", "Otro"];
 
-  // Función para calcular cuotas
-  // mensual = 1, quincenal = 2, semanal = 4 (aprox)
   const periodicidadMap = {
     mensual: 1,
     quincenal: 2,
     semanal: 4,
   };
 
+  // Calcular automáticamente las cuotas cuando cambia el tiempo o frecuencia
   useEffect(() => {
-    if (tiempoMeses && frecuenciaPago) {
-      const pagosPorMes = periodicidadMap[frecuenciaPago];
-      if (pagosPorMes) {
-        setCuotasCalculadas(tiempoMeses * pagosPorMes);
-      } else {
-        setCuotasCalculadas(0);
-      }
+    if (
+      data.frecuencia_pago === 'mensual' ||
+      data.frecuencia_pago === 'quincenal' ||
+      data.frecuencia_pago === 'semanal'
+    ) {
+      const pagosPorMes = periodicidadMap[data.frecuencia_pago];
+      const cuotas = Number(data.tiempo_meses) * pagosPorMes;
+      setData((prev) => ({ ...prev, cuotas_calculadas: cuotas }));
     } else {
-      setCuotasCalculadas(0);
+      setData((prev) => ({ ...prev, cuotas_calculadas: 0 }));
     }
-  }, [tiempoMeses, frecuenciaPago]);
+  }, [data.tiempo_meses, data.frecuencia_pago]);
+  
+
+  const handleChange = (field: keyof LoanData, value: any) => {
+    setData((prev) => ({ ...prev, [field]: value }));
+  };
 
   return (
     <form className="space-y-4 max-w-xl mx-auto">
@@ -49,24 +61,22 @@ export function LoanDetails() {
           type="number"
           className={inputClass}
           placeholder="Ej. 5000000"
-          value={monto}
-          onChange={(e) => setMonto(e.target.value)}
+          value={data.monto || ''}
+          onChange={(e) => handleChange("monto", e.target.value)}
         />
       </div>
 
-      <div className="flex space-x-4 max-w-xl mx-auto">
+      <div className="flex space-x-4">
         <div className="w-1/3">
           <label className={labelClass}>Tiempo (meses)</label>
           <select
             className={inputClass}
-            value={tiempoMeses}
-            onChange={(e) => setTiempoMeses(Number(e.target.value))}
+            value={data.tiempo_meses || ''}
+            onChange={(e) => handleChange("tiempo_meses", Number(e.target.value))}
           >
             <option value="">Seleccione una opción</option>
             {tiempos.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
+              <option key={t} value={t}>{t}</option>
             ))}
           </select>
         </div>
@@ -75,8 +85,8 @@ export function LoanDetails() {
           <label className={labelClass}>Frecuencia de pago</label>
           <select
             className={inputClass}
-            value={frecuenciaPago}
-            onChange={(e) => setFrecuenciaPago(e.target.value)}
+            value={data.frecuencia_pago || ''}
+            onChange={(e) => handleChange("frecuencia_pago", e.target.value)}
           >
             <option value="">Seleccione una opción</option>
             <option value="mensual">Mensual</option>
@@ -90,26 +100,22 @@ export function LoanDetails() {
           <input
             type="number"
             className={inputClass}
-            value={cuotasCalculadas}
+            value={data.cuotas_calculadas || 0}
             readOnly
-            placeholder="Se calcula automáticamente"
           />
         </div>
       </div>
-
 
       <div>
         <label className={labelClass}>Destino del préstamo</label>
         <select
           className={inputClass}
-          value={destinoPrestamo}
-          onChange={(e) => setDestinoPrestamo(e.target.value)}
+          value={data.destino_prestamo || ''}
+          onChange={(e) => handleChange("destino_prestamo", e.target.value)}
         >
           <option value="">Seleccione una opción</option>
-          {destinos.map((dest) => (
-            <option key={dest} value={dest}>
-              {dest}
-            </option>
+          {destinos.map((d) => (
+            <option key={d} value={d}>{d}</option>
           ))}
         </select>
       </div>
@@ -118,8 +124,8 @@ export function LoanDetails() {
         <label className={labelClass}>Tipo de garantía</label>
         <select
           className={inputClass}
-          value={tipoGarantia}
-          onChange={(e) => setTipoGarantia(e.target.value)}
+          value={data.tipo_garantia || ''}
+          onChange={(e) => handleChange("tipo_garantia", e.target.value)}
         >
           <option value="">Seleccione una opción</option>
           <option value="personal">Personal</option>
@@ -133,8 +139,8 @@ export function LoanDetails() {
         <label className={labelClass}>¿Tiene otros préstamos actualmente?</label>
         <select
           className={inputClass}
-          value={otrosPrestamos}
-          onChange={(e) => setOtrosPrestamos(e.target.value)}
+          value={data.otros_prestamos || ''}
+          onChange={(e) => handleChange("otros_prestamos", e.target.value)}
         >
           <option value="">Seleccione una opción</option>
           <option value="si">Sí</option>
@@ -148,8 +154,8 @@ export function LoanDetails() {
           className={inputClass}
           rows={3}
           placeholder="Escriba aquí detalles adicionales del préstamo"
-          value={descripcion}
-          onChange={(e) => setDescripcion(e.target.value)}
+          value={data.descripcion || ''}
+          onChange={(e) => handleChange("descripcion", e.target.value)}
         />
       </div>
 

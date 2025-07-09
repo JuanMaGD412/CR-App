@@ -29,6 +29,13 @@ export default function LoanApplicationForm() {
   const [datosPersonales2, setDatosPersonales2] = useState({});
   const [datosTrabajo1, setDatosTrabajo1] = useState({});
   const [datosTrabajo2, setDatosTrabajo2] = useState({});
+  const [datosReferencias, setDatosReferencias] = useState([]);
+  const [datosPatrimoniales, setDatosPatrimoniales] = useState({});
+  
+
+  const [datosAdicionales, setDatosAdicionales] = useState({});
+  const [datosPrestamo, setDatosPrestamo] = useState({});
+
 
 
   useEffect(() => {
@@ -71,10 +78,11 @@ export default function LoanApplicationForm() {
           {step === 1 && <PersonalInfo2 setData={setDatosPersonales2} data={datosPersonales2} />}
           {step === 2 && <WorkInfo1 setData={setDatosTrabajo1} data={datosTrabajo1} />}
           {step === 3 && <WorkInfo2 setData={setDatosTrabajo2} data={datosTrabajo2} />}
-          {step === 4 && <PersonalReferences />}
-          {step === 5 && <Assets />}
-          {step === 6 && <AdditionalData />}
-          {step === 7 && <LoanDetails />}
+          {step === 4 && <PersonalReferences setData={setDatosReferencias} data={datosReferencias} />}
+          {step === 5 && <Assets data={datosPatrimoniales} setData={setDatosPatrimoniales} />}
+          {step === 6 && (<AdditionalData setData={setDatosAdicionales} data={datosAdicionales} />)}
+
+          {step === 7 && <LoanDetails setData={setDatosPrestamo} data={datosPrestamo} />}
 
           <div className="mt-6 flex justify-between items-center">
             <button
@@ -89,11 +97,21 @@ export default function LoanApplicationForm() {
               className="px-4 py-2 bg-green-500 text-white rounded"
               onClick={async () => {
                 if (step === steps.length - 1) {
+                  if (!idUsuario) {
+                    alert("Error: el usuario no está identificado.");
+                    return;
+                  }
+
                   const payload = {
+                    idUsuario: idUsuario,
                     personal1: datosPersonales1,
                     personal2: datosPersonales2,
                     trabajo1: datosTrabajo1,
                     trabajo2: datosTrabajo2,
+                    referencias: datosReferencias,
+                    patrimoniales: datosPatrimoniales,
+                    adicionales: datosAdicionales,
+                    prestamo: datosPrestamo, // ✅ Aquí va
                   };
 
                   const { success, message } = await enviarDatos(payload);
@@ -110,6 +128,7 @@ export default function LoanApplicationForm() {
             >
               {step === steps.length - 1 ? 'Enviar' : 'Siguiente'}
             </button>
+
 
           </div>
         </div>

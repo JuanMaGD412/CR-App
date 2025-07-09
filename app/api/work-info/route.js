@@ -7,7 +7,6 @@ export async function POST(req) {
 
     const {
       cr_personal_info_id,
-      id_usuario,
       ocupacion,
       nombre_empresa,
       direccion_laboral,
@@ -25,7 +24,7 @@ export async function POST(req) {
 
     const query = `
       INSERT INTO cr_work_info (
-        cr_personal_info_id, id_usuario, ocupacion, nombre_empresa, direccion_laboral,
+        cr_personal_info_id, ocupacion, nombre_empresa, direccion_laboral,
         telefono_laboral, cargo, antiguedad_laboral, tipo_contrato,
         ingresos_mensuales, ingresos_adicionales, gastos_mensuales,
         productos_financieros, obligaciones_financieras, nivel_endeudamiento,
@@ -34,14 +33,13 @@ export async function POST(req) {
         $1, $2, $3, $4, $5,
         $6, $7, $8, $9,
         $10, $11, $12,
-        $13, $14, $15,
+        $13, $14,
         NOW(), NOW()
       ) RETURNING id;
     `;
 
     const values = [
       cr_personal_info_id,
-      id_usuario,
       ocupacion,
       nombre_empresa,
       direccion_laboral,
